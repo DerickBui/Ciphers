@@ -1,3 +1,9 @@
+import enchant
+#check the use of letter e and dictionary
+d = enchant.Dict("en_US")
+
+print(d.check("here"))
+
 alphabets = "abcdefghijklmnopqrstuvwxyz" # a normal alphabet
 key = "bcdefghijklmnopqrstuvwxyza" # a modified alphabet that is shifted by 1
 key = key[1:] + key[0]
@@ -42,28 +48,50 @@ def decrypt(cipher, key):
       text += i
   return text
 
-# encryptedMessage = encrypt(message, key)
-# decryptedMessage = decrypt(encryptedMessage, key)
-
-
-# print(encryptedMessage)
-# print(decryptedMessage)
-
-
 # length of alphabets is 26 for all for loops
 # brute force encrypted message 1
 for i in range(len(alphabets)):
   bruteForceStorage1[i] = decrypt(cipher1, key)
-  print(bruteForceStorage1[i])
+  print(str(i+1) + ". " + bruteForceStorage1[i])
   key = key[1:] + key[0] # shift key by one left
 
+markKey1 = 0
+finalWordCount = 0
+for i in range(len(bruteForceStorage1)):
+  wordCount = 0
+  for j in range(len(bruteForceStorage1[i]) - 5):
+    if (d.check(bruteForceStorage1[i][j:j + 5])):
+      # print("It's message: " + bruteForceStorage1[i])
+      # break
+      wordCount = wordCount + 1
+  if (wordCount > finalWordCount):
+    finalWordCount = wordCount
+    markKey1 = i
+
+print("Message in key " + str(markKey1 + 1) + ": " + bruteForceStorage1[markKey1])
 print("")
 
 #brute force encrypted message 2
 for i in range(len(alphabets)):
-  print(decrypt(cipher2, key))
+  bruteForceStorage2[i] = decrypt(cipher2, key)
+  print(str(i+1) + ". " + bruteForceStorage2[i])
   key = key[1:] + key[0] # shift key by one left
 
+
+markKey2 = 0
+finalWordCount = 0
+for i in range(len(bruteForceStorage2)):
+  wordCount = 0
+  for j in range(len(bruteForceStorage2[i]) - 5):
+    if (d.check(bruteForceStorage2[i][j:j + 5])):
+      # print("It's message: " + bruteForceStorage1[i])
+      # break
+      wordCount = wordCount + 1
+  if (wordCount > finalWordCount):
+    finalWordCount = wordCount
+    markKey2 = i
+
+print("Message in key " + str(markKey1 + 1) + ": " + bruteForceStorage2[markKey2])
 print("")
 
 #brute force encrypted message 3
