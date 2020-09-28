@@ -71,6 +71,7 @@ def bruteForce(cipher, key):
     key = key[1:] + key[0] # shift key by one left
   return bruteForceStorage
 
+# this function finds correct key from brute force decrypt
 def findCorrectKey(bruteForceStorage):
   markKey = 0
   finalWordCount = 0
@@ -85,8 +86,39 @@ def findCorrectKey(bruteForceStorage):
       markKey = i
 
   print("")
-  print("Message in key " + str(markKey + 1) + ": " + bruteForceStorage1[markKey])
+  print("Message in key " + str(markKey + 1) + ": " + bruteForceStorage[markKey])
   print("")
+
+# Function that returns ordered dictionary of combination frequency by greatest to least
+def orderLetFreqDict(letterFreq):
+  incrNum = 1
+  orderedDict = {}
+  for i in reversed(sorted(letterFreq, key=letterFreq.get)):
+    orderedDict[incrNum] = i
+    incrNum = incrNum + 1
+
+  return orderedDict
+
+# Function that counts character frequency
+def oneLetFreqCheck(cipherNS):
+  charCount = {}
+  for i in cipherNS:
+    if (i in charCount):
+      charCount[i] = charCount[i] + 1
+    else:
+      charCount[i] = 1
+  return charCount
+
+# Function that finds the most frequent two letters
+def twoLetFreqCheck(cipherNS):
+  threeFreq = {}
+  for i in range(len(cipherNS)-2):
+    if (cipherNS[i:i+2] in threeFreq):
+      threeFreq[cipherNS[i:i+2]] = threeFreq[cipherNS[i:i+2]] + 1
+    else:
+      threeFreq[cipherNS[i:i+2]] = 1
+  
+  return threeFreq
 
 # Function that finds the most frequent three letters
 def threeLetFreqCheck(cipherNS):
@@ -98,6 +130,28 @@ def threeLetFreqCheck(cipherNS):
       threeFreq[cipherNS[i:i+3]] = 1
   
   return threeFreq
+
+# Function that checks on letter clashes
+# mostFreqLet -> Most frequent letter combination
+# subLetters -> Dictionary used to assign letters
+# letComb -> Dictionary of variable sized dictionary combination
+# dictNumber -> Key to access to letComb dictionary
+def clashCheck(mostFreqLet, subLetters, letComb, dictNumber):
+  # Check if letter already assigned
+  # for i in letComb[dictNumber]:
+  #   if i in subLetters.values():
+  #     print("DUH")
+  #     return True
+  
+  # Check if letter clashes
+  for i in range(len(mostFreqLet)):
+    clash = False
+    if letComb[dictNumber][i] not in subLetters.values(): # If letter already assigned to subletters
+      if ((subLetters[mostFreqLet[i]] != None) and (subLetters[mostFreqLet[i]] != letComb[dictNumber][i])):
+        clash = True
+    else:
+      print("Yeet")
+  return clash
 
 # Cipher 1--------------------------------------------------------
 # length of alphabets is 26 for all for loops
@@ -124,17 +178,33 @@ for i in cipher4:
 
 message4 = ""
 
-print(cipher4NS)
 
-# gets 3 letter frequencies of cipher4NS
-threeLetterFreq = threeLetFreqCheck(cipher4NS)
+# Check most frequent letter in order from greatest to least
+orderedOneLetterFreq = orderLetFreqDict(oneLetFreqCheck(cipher4NS))
 
-# Check most frequent 3 letters
-for i in sorted(threeLetterFreq, key=threeLetterFreq.get):
-  print(i + " " + str(threeLetterFreq[i]))
+# Check most frequent 2 letters in order from greatest to least
+orderedTwoLetterFreq = orderLetFreqDict(twoLetFreqCheck(cipher4NS))
+
+# Check most frequent 3 letters in order from greatest to least
+orderedThreeLetterFreq = orderLetFreqDict(threeLetFreqCheck(cipher4NS))
+
+print(orderedThreeLetterFreq)
 
 print("")
-print(max(threeLetterFreq, key=threeLetterFreq.get) + " " + str(threeLetterFreq[max(threeLetterFreq, key=threeLetterFreq.get)]))
+
+# Gets the most frequent 3 letter combination
+mostFreq3Let = orderedThreeLetterFreq[1]
+
+# # check letter clashing
+# print(clashCheck(mostFreq3Let, subLetters, threeComb, 1)) #input shq, subLettersDict, three comb frequency, the
+
+
+# for i in range(len(mostFreq3Let)): # Add letters to subLetters
+#   subLetters[mostFreq3Let[i]] = threeComb[1][i]
+
+# #TESTING TESTING
+# mostFreq3Let = orderedThreeLetterFreq[2]
+# print(clashCheck(mostFreq3Let, subLetters, threeComb, 2)) #input shq, subLettersDict, three comb frequency, and
 
 # for i in range(len(cipher4NS)):
 #   if subLetters[cipher4NS[i]] != None:
@@ -142,6 +212,8 @@ print(max(threeLetterFreq, key=threeLetterFreq.get) + " " + str(threeLetterFreq[
 #   else:
 #     message4 = message4 + cipher4NS[i]
 
-print(message4)
+# print(subLetters)
+
+# print(message4)
 
 
