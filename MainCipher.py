@@ -131,27 +131,20 @@ def threeLetFreqCheck(cipherNS):
   
   return threeFreq
 
-# Function that checks on letter clashes
-# mostFreqLet -> Most frequent letter combination
-# subLetters -> Dictionary used to assign letters
-# letComb -> Dictionary of variable sized dictionary combination
-# dictNumber -> Key to access to letComb dictionary
-def clashCheck(mostFreqLet, subLetters, letComb, dictNumber):
-  # Check if letter already assigned
-  # for i in letComb[dictNumber]:
-  #   if i in subLetters.values():
-  #     print("DUH")
-  #     return True
-  
+# Function that checks on one letter clash, true if clash
+# mostFreqLetChar -> character of selected mostFreqLet
+# letCombChar -> character of selected letter combination
+def clashLetCheck(mostFreqLetChar, letCombChar):
   # Check if letter clashes
-  for i in range(len(mostFreqLet)):
-    clash = False
-    if letComb[dictNumber][i] not in subLetters.values(): # If letter already assigned to subletters
-      if ((subLetters[mostFreqLet[i]] != None) and (subLetters[mostFreqLet[i]] != letComb[dictNumber][i])):
-        clash = True
-    else:
-      print("Yeet")
-  return clash
+  if letCombChar not in subLetters.values(): # Check if letter not assigned in subLetters
+    if subLetters[mostFreqLetChar] != None: # If there is a letter assigned
+      if subLetters[mostFreqLetChar] != letCombChar: # If assigned letter does not match
+        return True # There is a clash
+  else:
+    if subLetters[mostFreqLetChar] != letCombChar:
+      return True # There is a clash with another letter assigned
+
+  return False
 
 # Cipher 1--------------------------------------------------------
 # length of alphabets is 26 for all for loops
@@ -188,23 +181,24 @@ orderedTwoLetterFreq = orderLetFreqDict(twoLetFreqCheck(cipher4NS))
 # Check most frequent 3 letters in order from greatest to least
 orderedThreeLetterFreq = orderLetFreqDict(threeLetFreqCheck(cipher4NS))
 
-print(orderedThreeLetterFreq)
-
 print("")
 
 # Gets the most frequent 3 letter combination
 mostFreq3Let = orderedThreeLetterFreq[1]
 
-# # check letter clashing
-# print(clashCheck(mostFreq3Let, subLetters, threeComb, 1)) #input shq, subLettersDict, three comb frequency, the
+# check letter clash for e
+if not (clashLetCheck(mostCommon[0], orderedOneLetterFreq[1])):
+  print("yeah")
+  subLetters[mostCommon[0]] = orderedOneLetterFreq[1]
 
+# check letter clash
+for i in range(len(threeComb[1])):
+  print(mostFreq3Let[i] + " " + threeComb[1][i])
+  print(clashLetCheck(mostFreq3Let[i], threeComb[1][i]))
 
-# for i in range(len(mostFreq3Let)): # Add letters to subLetters
-#   subLetters[mostFreq3Let[i]] = threeComb[1][i]
+for i in range(len(mostFreq3Let)): # Add letters to subLetters
+  subLetters[mostFreq3Let[i]] = threeComb[1][i]
 
-# #TESTING TESTING
-# mostFreq3Let = orderedThreeLetterFreq[2]
-# print(clashCheck(mostFreq3Let, subLetters, threeComb, 2)) #input shq, subLettersDict, three comb frequency, and
 
 # for i in range(len(cipher4NS)):
 #   if subLetters[cipher4NS[i]] != None:
