@@ -8,16 +8,16 @@ key = "bcdefghijklmnopqrstuvwxyza" # a modified alphabet that is shifted by 1
 
 # Information-------------------------------------------
 # estimated frequency of letters from most to least
-mostCommon = "etaoinshrdlucmwfygpbvkxjqz"
+mostCommon = "ETAOINSHRDLUCMWFYGPBVKXJQZ"
 
 # Most common double letter combinations
-doubleComb = {1 : "ss", 2 : "ee", 3 : "tt", 4 : "ff", 5 : "ll", 6 : "mm", 7 : "oo"}
+doubleComb = {1 : "SS", 2 : "EE", 3 : "TT", 4 : "FF", 5 : "LL", 6 : "MM", 7 : "OO"}
 
 # Most common three letter combinations
-threeComb = {1 : "the", 2 : "and", 3 : "tha:", 4 : "ent", 5 : "ion", 6 : "tio", 7 : "for", 8 : "nde", 9 : "has", 10 : "nce", 11 : "tis", 12 : "oft", 13 : "men"}
+threeComb = {1 : "THE", 2 : "AND", 3 : "THA:", 4 : "ENT", 5 : "ION", 6 : "TIO", 7 : "FOR", 8 : "NDE", 9 : "HAS", 10 : "NCE", 11 : "TIS", 12 : "OFT", 13 : "MEN"}
 
 # Most common two letter combinations
-twoComb = {1 : "th", 2 : "he", 3 : "an", 4 : "in", 5 : "er", 6 : "on", 7 : "re", 8 : "ed", 9 : "nd", 10 : "ha", 11 : "at", 12 : "en"}
+twoComb = {1 : "TH", 2 : "HE", 3 : "AN", 4 : "IN", 5 : "ER", 6 : "ON", 7 : "RE", 8 : "ED", 9 : "ND", 10 : "HA", 11 : "AT", 12 : "EN"}
 
 #For assigning letters
 subLetters = {'a':None, 'b':None, 'c':None, 'd':None, 'e':None, 'f':None, 'g':None, 'h':None, 'i':None, 'j':None, 'k':None, 'l':None, 'm':None, 'n':None, 'o':None, 'p':None, 'q':None, 'r':None, 's':None, 't':None, 'u':None, 'v':None, 'w':None, 'x':None, 'y':None, 'z':None}
@@ -161,9 +161,67 @@ bruteForceStorage2 = bruteForce(cipher2, key)
 # finds correct key
 findCorrectKey(bruteForceStorage2)
 
+# Cipher 3--------------------------------------------------------
+cipher3NS = ""
+for i in cipher3:
+  if i != ' ':
+    cipher3NS = cipher3NS + i
+
+message3 = ""
+
+
+# Check most frequent letter in order from greatest to least
+orderedOneLetterFreq = orderLetFreqDict(oneLetFreqCheck(cipher3NS))
+
+# Check most frequent 2 letters in order from greatest to least
+orderedTwoLetterFreq = orderLetFreqDict(twoLetFreqCheck(cipher3NS))
+
+# Check most frequent 3 letters in order from greatest to least
+orderedThreeLetterFreq = orderLetFreqDict(threeLetFreqCheck(cipher3NS))
+
+# Gets the most frequent 3 letter combination
+mostFreq3Let = orderedThreeLetterFreq[1]
+
+# check letter clash for e
+if not clashLetCheck(orderedOneLetterFreq[1], mostCommon[0]): # if not clash
+  subLetters[orderedOneLetterFreq[1]] = mostCommon[0] # q = e
+
+# check 3 letter clash for shq and the
+clashed = False
+for i in range(len(orderedThreeLetterFreq[1])):
+  if clashLetCheck(orderedThreeLetterFreq[1][i], threeComb[1][i]): # if clash
+    clashed = True
+    break
+  else: # No clash
+    print("False")
+
+
+if not clashed: # If no clashes
+  for i in range(len(orderedThreeLetterFreq[1])):
+    subLetters[orderedThreeLetterFreq[1][i]] = threeComb[1][i]
+
+for i in range(len(mostCommon)):
+  if mostCommon[i] not in subLetters.values(): # Continue if letter not assigned
+    for j in orderedOneLetterFreq: # Goes through each orderedOneLetterFreq
+      if not clashLetCheck(orderedOneLetterFreq[j], mostCommon[i]): # Continue if letter not clashing
+        subLetters[orderedOneLetterFreq[j]] = mostCommon[i]
+        break
+
+for i in range(len(cipher3NS)):
+  if subLetters[cipher3NS[i]] != None:
+    message3 = message3 + subLetters[cipher3NS[i]]
+  else:
+    message3 = message3 + cipher3NS[i]
+
+print(message3)
 
 # Cipher 4--------------------------------------------------------
 # Cipher4 No Space
+
+# Reset substituted letters
+for i in subLetters:
+  subLetters[i] = None
+
 cipher4NS = ""
 for i in cipher4:
   if i != ' ':
@@ -187,27 +245,38 @@ print("")
 mostFreq3Let = orderedThreeLetterFreq[1]
 
 # check letter clash for e
-if not (clashLetCheck(mostCommon[0], orderedOneLetterFreq[1])):
-  print("yeah")
-  subLetters[mostCommon[0]] = orderedOneLetterFreq[1]
+if not clashLetCheck(orderedOneLetterFreq[1], mostCommon[0]): # if not clash
+  subLetters[orderedOneLetterFreq[1]] = mostCommon[0] # q = e
 
-# check letter clash
-for i in range(len(threeComb[1])):
-  print(mostFreq3Let[i] + " " + threeComb[1][i])
-  print(clashLetCheck(mostFreq3Let[i], threeComb[1][i]))
+# check 3 letter clash for shq and the
+clashed = False
+for i in range(len(orderedThreeLetterFreq[1])):
+  if clashLetCheck(orderedThreeLetterFreq[1][i], threeComb[1][i]): # if clash
+    clashed = True
+    break
+  else: # No clash
+    print("False")
 
-for i in range(len(mostFreq3Let)): # Add letters to subLetters
-  subLetters[mostFreq3Let[i]] = threeComb[1][i]
 
+if not clashed: # If no clashes
+  for i in range(len(orderedThreeLetterFreq[1])):
+    subLetters[orderedThreeLetterFreq[1][i]] = threeComb[1][i]
 
-# for i in range(len(cipher4NS)):
-#   if subLetters[cipher4NS[i]] != None:
-#     message4 = message4 + subLetters[cipher4NS[i]]
-#   else:
-#     message4 = message4 + cipher4NS[i]
+for i in range(len(mostCommon)):
+  if mostCommon[i] not in subLetters.values(): # Continue if letter not assigned
+    for j in orderedOneLetterFreq: # Goes through each orderedOneLetterFreq
+      if not clashLetCheck(orderedOneLetterFreq[j], mostCommon[i]): # Continue if letter not clashing
+        subLetters[orderedOneLetterFreq[j]] = mostCommon[i]
+        break
 
-# print(subLetters)
+for i in range(len(cipher4NS)):
+  if subLetters[cipher4NS[i]] != None:
+    message4 = message4 + subLetters[cipher4NS[i]]
+  else:
+    message4 = message4 + cipher4NS[i]
 
-# print(message4)
+print(subLetters)
+
+print(message4)
 
 
