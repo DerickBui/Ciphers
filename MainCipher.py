@@ -32,6 +32,7 @@ cipher4 = "iyhqz ewqin azqej shayz niqbe aheum hnmnj jaqii yuexq ayqkn jbeuq iih
 # this a function that will encrypt the message
 
 # Create a dictionary of bigrams
+# Text file taken online
 bigramScore = {}
 with open("bigrams.txt") as f:
   for i in f:
@@ -48,6 +49,7 @@ def scoring(changedCipher):
       score = score + (-11.63)
   return score
 
+# this a function that will encrypt the message
 def encrypt(message, key):
   cipher = ""
   for i in message:
@@ -76,6 +78,7 @@ def bruteForce(cipher, storeKey, key):
   print("Caesar ciphering")
   bruteForceStorage = [0] * len(alphabets)
   for i in range(len(alphabets)):
+    print("Caesar Ciphering " + str(i + 1))
     bruteForceStorage[i] = decrypt(cipher, key)
     storeKey[i] = key
     key = key[1:] + key[0] # shift key by one left
@@ -154,7 +157,7 @@ def hillClimb(cipher):
   stringAndKey = [overallMessage, overallMaxPlayKey]
   return stringAndKey
 
-# Find key most filter
+# Find key most fit
 def mostFit(caesar, hC):
   if len(caesar[0]) < 95:
     return caesar
@@ -218,12 +221,13 @@ def mostFit(caesar, hC):
 #   return threeFreq
 
 # Cipher 1--------------------------------------------------------
-# length of alphabets is 26 for all for loops
+# Create sentence with no spaces
 cipher1NS = ""
 for i in cipher1:
   if i != ' ':
     cipher1NS = cipher1NS + i
 
+# Capitalize letters
 cipher1NS = cipher1NS.upper()
 
 print("------------------Cipher 1------------------")
@@ -238,11 +242,13 @@ print("Most fit key of cipher 1: " + str("".join(bestFit1[1])))
 print("Resulting sentence: " + str(bestFit1[0]))
 
 # Cipher 2--------------------------------------------------------
+# Create sentence with no spaces
 cipher2NS = ""
 for i in cipher2:
   if i != ' ':
     cipher2NS = cipher2NS + i
 
+# Capitalize letters
 cipher2NS = cipher2NS.upper()
 
 print("------------------Cipher 2------------------")
@@ -257,11 +263,13 @@ print("Most fit key of cipher 2: " + str("".join(bestFit2[1])))
 print("Resulting sentence: " + str(bestFit2[0]))
 
 # Cipher 3--------------------------------------------------------
+# Create sentence with no spaces
 cipher3NS = ""
 for i in cipher3:
   if i != ' ':
     cipher3NS = cipher3NS + i
 
+# Capitalize letters
 cipher3NS = cipher3NS.upper()
 
 print("------------------Cipher 3------------------")
@@ -276,15 +284,16 @@ print("Most fit key of cipher 3: " + str("".join(bestFit3[1])))
 print("Resulting sentence: " + str(bestFit3[0]))
 
 # Cipher 4--------------------------------------------------------
-# Cipher4 No Space
+# Create sentence with no spaces
 cipher4NS = ""
 for i in cipher4:
   if i != ' ':
     cipher4NS = cipher4NS + i
 
-print("------------------Cipher 4------------------")
-
+# Capitalize letters
 cipher4NS = cipher4NS.upper()
+
+print("------------------Cipher 4------------------")
 
 #brute force encrypted message 4
 bruteForceStorage4 = bruteForce(cipher4.upper(), bruteForceStorageKeys4, key)
