@@ -1,3 +1,4 @@
+# import random library to be able to use random functions
 import random
 
 # a normal alphabet
@@ -35,33 +36,76 @@ def decrypt(cipher, key):
       text += i
   return text
 
-# Encryption and decryption of message 1
+# Key, encryption, and decryption of message 1
 encrypted1 = encrypt(message1, key)
 decrypted1 = decrypt(encrypted1, key)
 
+print("Key for message 1: " + key)
 print("Encrypted message 1:")
 print(encrypted1)
+print("")
 print("Decrypted message 1:")
 print(decrypted1)
 
 print("")
+print("")
 
-# Encryption and decryption of message 2
+# randomize key
+key = ''.join(random.sample(alphabets,len(alphabets)))
+
+# Key, encryption, and decryption of message 2
 encrypted2 = encrypt(message2, key)
 decrypted2 = decrypt(encrypted2, key)
 
+print("Key for message 2: " + key)
 print("Encrypted message 2:")
 print(encrypted2)
+print("")
 print("Decrypted message 2:")
 print(decrypted2)
 
 print("")
+print("")
 
-# Encryption and decryption of message 3
+# randomize key
+key = ''.join(random.sample(alphabets,len(alphabets)))
+
+# Key, encryption, and decryption of message 3
 encrypted3 = encrypt(message3, key)
 decrypted3 = decrypt(encrypted3, key)
 
+print("Key for message 3: " + key)
 print("Encrypted message 3:")
 print(encrypted3)
+print("")
 print("Decrypted message 3:")
 print(decrypted3)
+
+print("Time to input your message in")
+
+keepGoing = "y"
+inputedMessage = ""
+
+# Input message for encryption and decryption
+while keepGoing == "y":
+  # Input message
+  x = input("Type in your message for encryption: ")
+  inputedMessage = x
+
+  # randomize key
+  key = ''.join(random.sample(alphabets,len(alphabets)))
+
+  # Key, encryption, and decryption of inputeed message
+  encrypted = encrypt(inputedMessage, key)
+  decrypted = decrypt(encrypted, key)
+
+  print("Key for inputted message: " + key)
+  print("Encrypted message:")
+  print(encrypted)
+  print("")
+  print("Decrypted message:")
+  print(decrypted)
+
+  print("")
+  x = input("Want to put another message(y/n)?: ")
+  keepGoing = str(x)
